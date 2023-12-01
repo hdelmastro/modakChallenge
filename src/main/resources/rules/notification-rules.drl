@@ -1,0 +1,45 @@
+import com.modak.hdelmastro.model.NotificationDto;
+import java.util.concurrent.TimeUnit;
+
+global com.modak.hdelmastro.domain.NotificationValidator notificationValidator;
+global java.util.List notificationsTime;
+
+dialect "mvel"
+
+rule "Limit notifications for status"
+when
+    $notification: NotificationDto(type == "STATUS")
+
+    eval(notificationsTime == null || notificationsTime.size() <= 2)
+then
+    System.out.println("Rule matched for status");
+    notificationValidator.setMaxNotifications(2);
+    notificationValidator.setPeriod(1);
+    notificationValidator.setTimeUnit(TimeUnit.MINUTES);
+end
+
+rule "Limit notifications for news"
+when
+
+    $notification: NotificationDto(type == "NEWS")
+
+    eval(notificationsTime == null || notificationsTime.size() <= 1)
+then
+    System.out.println("Rule matched for news");
+    notificationValidator.setMaxNotifications(1);
+    notificationValidator.setPeriod(1);
+    notificationValidator.setTimeUnit(TimeUnit.DAYS);
+end
+
+rule "Limit notifications for marketing"
+when
+    $notification: NotificationDto(type == "MARKETING")
+
+    eval(notificationsTime == null || notificationsTime.size() <= 3)
+then
+    System.out.println("Rule matched for marketing");
+    notificationValidator.setMaxNotifications(3);
+    notificationValidator.setPeriod(1);
+    notificationValidator.setTimeUnit(TimeUnit.HOURS);
+end
+
