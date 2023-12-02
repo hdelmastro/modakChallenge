@@ -1,7 +1,6 @@
 package com.modak.hdelmastro.service.impl;
 
 import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import com.modak.hdelmastro.domain.NotificationValidator;
 import com.modak.hdelmastro.model.NotificationDto;
 import com.modak.hdelmastro.model.exception.MaxNotificationException;
@@ -17,7 +16,11 @@ import java.util.List;
 @Slf4j
 public class ValidatorServiceImpl implements ValidatorService {
 
-    private final Cache<String, List<LocalDateTime>> caffeineCache = Caffeine.newBuilder().build();
+    private final Cache<String, List<LocalDateTime>> caffeineCache;
+
+    public ValidatorServiceImpl(Cache<String, List<LocalDateTime>> caffeineCache) {
+        this.caffeineCache = caffeineCache;
+    }
 
     @Override
     public List<LocalDateTime> getNotificationsTime(String recipient) {

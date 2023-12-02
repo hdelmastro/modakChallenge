@@ -5,8 +5,11 @@ import com.modak.hdelmastro.model.exception.MaxNotificationException;
 import com.modak.hdelmastro.model.exception.NoRuleException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,4 +38,16 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponseDto> handleValidationExcpetions(MethodArgumentNotValidException ex) {
+
+        return ResponseEntity.badRequest()
+                .body(ErrorResponseDto
+                        .builder()
+                        .details(ex.getLocalizedMessage())
+                        .message(ex.getBody().getDetail())
+                        .timestamp(LocalDateTime.now())
+                        .build());
+    }
 }

@@ -1,1 +1,3 @@
-
+cache:
+  caffeine:
+    spec: "expireAfterAccess=2d"

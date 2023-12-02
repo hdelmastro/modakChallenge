@@ -20,7 +20,6 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final KieContainer kieContainer;
     private final Gateway gateway;
-
     private final ValidatorService validatorService;
 
     public NotificationServiceImpl(KieContainer kieContainer, Gateway gateway, ValidatorService validatorService) {
@@ -44,6 +43,7 @@ public class NotificationServiceImpl implements NotificationService {
 
         if (countRules == 0) {
             log.error("No rules fired for notification {} to {}", notification.getType(), notification.getRecipient());
+            kieSession.dispose();
             throw new NoRuleException("No rules fired for notification", "No rules available to notification type " + notification.getType(), LocalDateTime.now());
         }
 
